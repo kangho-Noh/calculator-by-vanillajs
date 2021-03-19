@@ -2,89 +2,81 @@
 //import "./styles.css";
 // <⚠️ /DONT DELETE THIS ⚠️>
 
-// const b1 = document.querySelector("#b1"),
-//   b2 = document.querySelector("#b2"),
-//   b3 = document.querySelector("#b3"),
-//   b4 = document.querySelector("#b4"),
-//   b5 = document.querySelector("#b5"),
-//   b6 = document.querySelector("#b6"),
-//   b7 = document.querySelector("#b7"),
-//   b8 = document.querySelector("#b8"),
-//   b9 = document.querySelector("#b9"),
-//   b0 = document.querySelector("#b0"),
-//   plusbtn = document.querySelector("#plus"),
-//   minusbtn = document.querySelector("#minus"),
-//   equalbtn = document.querySelector("#equal"),
-//   multibtn = document.querySelector("#multi"),
-//   dividebtn = document.querySelector("#divide"),
-//   answer = document.querySelector("#answer"),
 const body = document.querySelector("body"),
-calcuator = body.querySelector(".calculator");
+  calcuator = body.querySelector(".calculator");
 
 const answer = document.querySelector("#answer");
 
-const EQUATION = "equation";
+let left = 0;
+let operator = "";
+let reset_text = false;
 
-function resetAll(){
-  answer.innerHTML=0;
-  localStorage.clear();
+function resetAll() {
+  left = 0;
+  operator = "";
+  answer.innerHTML = 0;
 }
 
-function makeNumber(value){
+function makeNumber(value) {
   let res = Number(answer.innerHTML);
   value = Number(value);
-  if(res === 0)
-  {
-    answer.innerHTML = value;
-  }else{
-    answer.innerHTML = res*10+value;
-  }
+  answer.innerHTML = res * 10 + value;
 }
 
-function saveEquation(operator){
-  console.log("hello");
-  const NUM = answer.innerHTML;
-  const OPER = operator;
-  localStorage.setItem(EQUATION,JSON.stringify({NUM, OPER}));
+function doOperation() {
+  if (operator === "+") {
+    left = left + Number(answer.innerHTML);
+  } else if (operator === "-") {
+    left = left - Number(answer.innerHTML);
+  } else if (operator === "*") {
+    left = left * Number(answer.innerHTML);
+  } else if (operator === "/") {
+    left = left / Number(answer.innerHTML);
+  }
+  answer.innerHTML = left;
 }
 
 function clickHandler(event) {
-  if(event.target.tagName!=="BUTTON")
-  {
+  if (event.target.tagName !== "BUTTON") {
     return;
   }
   const value = event.target.innerHTML;
+  console.log(value);
 
-  if(value==='C')
-  {
+  if (value === "C") {
     resetAll();
-    return;
-  }
-  const equation = localStorage.getItem(EQUATION);
-  if(equation===null){
-    if(value ==="+" | value ==="/" | value ==="*" |value ==="-"|value ==="="){
-      if(value==="=" | answer.innerHTML==='0'){
-        return;
-      }else{
-        saveEquation(value);
-      }
-    }else{
-      makeNumber(value);
+  } else if (value === "=") {
+    if ((left > 0) & (operator != "")) {
+      doOperation();
+      operator = "";
     }
-  }else{
-    const parsedEquation = JSON.parse(equation);
-    console.log(parsedEquation);
-    if(value ==="+" | value ==="/" | value ==="*" |value ==="-"){
-      parsedEquation.OPER=value;
-      
-    }else{
-      makeNumber(value);
+  } else if (
+    (value === "-") |
+    (value === "+") |
+    (value === "/") |
+    (value === "*")
+  ) {
+    if ((operator != "") & (left != 0)) {
+      doOperation();
     }
+    reset_text = true;
+
+    operator = value;
+    if (left == 0) {
+      left = answer.innerHTML;
+    }
+    //equal연산 후 operator 교체
+  } else {
+    if (reset_text === true) {
+      answer.innerHTML = "0";
+      reset_text = false;
+    }
+    makeNumber(value);
   }
 }
 
 function init() {
-  localStorage.clear();
   calcuator.addEventListener("click", clickHandler);
 }
+
 init();
