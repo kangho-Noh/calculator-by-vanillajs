@@ -25,13 +25,13 @@ function makeNumber(value) {
 
 function doOperation() {
   if (operator === "+") {
-    left = left + Number(answer.innerHTML);
+    left = Number(left) + Number(answer.innerHTML);
   } else if (operator === "-") {
-    left = left - Number(answer.innerHTML);
+    left = Number(left) - Number(answer.innerHTML);
   } else if (operator === "*") {
-    left = left * Number(answer.innerHTML);
+    left = Number(left) * Number(answer.innerHTML);
   } else if (operator === "/") {
-    left = left / Number(answer.innerHTML);
+    left = Number(left) / Number(answer.innerHTML);
   }
   answer.innerHTML = left;
 }

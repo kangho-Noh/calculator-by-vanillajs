@@ -1,4 +1,31 @@
 body {
+  color: white;
   font-family: sans-serif;
   background-color: black;
+}
+
+button {
+  width: 40px;
+  background-color: dimgray;
+}
+
+.calculator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator div:first-child {
+  display: flex;
+  width: 200px;
+}
+.calculator div:first-child > button {
+  position: absolute;
+  right: 10px;
+}
+#b0 {
+  width: 85px;
 }
